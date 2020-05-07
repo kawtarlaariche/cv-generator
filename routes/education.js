@@ -1,13 +1,14 @@
 const express = require('express')
 const router = express.Router()
 
-const EducationController = require('../controller/education')
+const EducationController = require('../controller/education');
+const checkAuth = require('../middlewares/checkAuth');
 
-router.get('/',EducationController.index);
-router.get('/:id',EducationController.findById);
-router.post('/',EducationController.create);
-router.put('/:id',EducationController.update);
-router.delete('/:id',EducationController.delete);
+router.get('/', checkAuth, EducationController.index);
+router.get('/:id', checkAuth, EducationController.findById);
+router.post('/', checkAuth, EducationController.create);
+router.put('/:id', checkAuth, EducationController.update);
+router.delete('/:id', checkAuth, EducationController.delete);
 
 
 module.exports = router;

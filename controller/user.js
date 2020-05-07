@@ -72,23 +72,28 @@ exports.login = (req, res) => {
     }).then(
         users => {
             if (users.length > 0) {
-                bcrypt.compare(req.body.password, users[0].password).then((_res) => {
-                    // res === true
+                bcrypt.compare(req.body.password, users[0].password)
+                    .then(
+                        compare => {
+                         if(compare){
+                            let token = jwt.sign({ email: req.body.email }, 'AIMAD', {
+                                expiresIn: "24h"
+                            })
+                            res.status(200).json({ token });
+                         }
+                        else  res.status(400).json({msg:"password incorrect"})   
 
-                    let token = jwt.sign({ email: req.body.email }, 'AIMAD', {
-                        expiresIn: "24h"
-                    })
-                    res.json({ token })
-
-                })
+                        },
+                        
+                    )
             }
             else {
-                res.json({ msg: "no email found " })
+                res.status(403).json({ msg: "email incorrect" })
             }
 
         },
         err => {
-            res.json({ msg: "incorrect data" })
+            res.status(500).json({ msg: ' server Problem !! could plz later try to connect' })
         }
     )
 }
@@ -96,15 +101,37 @@ exports.login = (req, res) => {
 
 exports.register = (req, res) => {
     bcrypt.hash(req.body.password, 10, function (err, hash) {
-        User.create({ email: req.body.email, password: hash })
-            .then(
-                user => {
-                    res.json({ msg: "Sucess !" })
-                },
-                err => {
-                    res.status(500).json({ msg: "Server Error Please contact the support !" })
+        User.findAll({
+            where: {
+                email: req.body.email,
+            },
+            raw: true
+        }).then(
+            users=>{
+                if (users.length > 0){
+                    res.status(400).json({msg:"email already exist"}) 
                 }
-            )
+                else {
+                User.create(
+                    {
+                        firstname: req.body.firstname,
+                        lastname: req.body.lastname,
+                        email: req.body.email,
+                        password: hash
+                    })
+                    .then(
+                        user => {
+                            res.status(200).json({ msg: "Sucess !" })
+                        },
+                        err => {
+                            res.status(500).json({ msg: "Server Error Please contact the support !" })
+                        }
+                    )
+                }
+            }
+          
+        )
+        
     })
 }
 
