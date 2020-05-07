@@ -1,11 +1,16 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const language = sequelize.define('language', {
+  const Language = sequelize.define('Language', {
     name: DataTypes.STRING,
-    level: DataTypes.STRING
+    level: DataTypes.STRING,
+    users_id: DataTypes.INTEGER
   }, {});
-  language.associate = function(models) {
+  Language.associate = function(models) {
     // associations can be defined here
+    Language.belongsTo(models.User, {
+      foreignKey: "users_id",
+      as: "user"
+    })
   };
-  return language;
+  return Language;
 };

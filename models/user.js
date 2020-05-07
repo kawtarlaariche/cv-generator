@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const user = sequelize.define('user', {
+  const User = sequelize.define('User', {
     firstname: DataTypes.STRING,
     lastname: DataTypes.STRING,
     email: DataTypes.STRING,
@@ -9,45 +9,16 @@ module.exports = (sequelize, DataTypes) => {
     birth: DataTypes.DATE,
     placeBirth: DataTypes.STRING,
     nationality: DataTypes.STRING,
+    address: DataTypes.STRING,
     image: DataTypes.BLOB,
     linkedin: DataTypes.STRING,
     instagram: DataTypes.STRING,
     facebook: DataTypes.STRING,
     website: DataTypes.STRING,
-    profile: DataTypes.STRING,
-    adresses_id: DataTypes.INTEGER,
-    educations_id: DataTypes.INTEGER,
-    experiences_id: DataTypes.INTEGER,
-    projects_id: DataTypes.INTEGER,
-    hobbies_id: DataTypes.INTEGER,
-    langues_id: DataTypes.INTEGER
+    profile: DataTypes.STRING
   }, {});
-  user.associate = function(models) {
+  User.associate = function(models) {
     // associations can be defined here
-    user.belongsTo(models.adress,{
-      foreignkey:"adresses_id",
-      as: "adress"
-    });
-    user.belongsTo(models.education,{
-      foreignkey:"educations_id",
-      as: "education"
-    });
-    user.belongsTo(models.experience,{
-      foreignkey:"experiences_id",
-      as: "experience"
-    });
-    user.belongsTo(models.project,{
-      foreignkey:"projects_id",
-      as: "project"
-    });
-    user.belongsTo(models.hobby,{
-      foreignkey:"hobbies_id",
-      as: "hobby"
-    });
-    user.belongsTo(models.langue,{
-      foreignkey:"langues_id",
-      as: "language"
-    });
   };
-  return user;
+  return User;
 };

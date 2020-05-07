@@ -1,12 +1,13 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const educationController = require('../controller/education');
+const EducationController = require('../controller/education')
 
-router.get('/', educationController.index);
-router.get('/:id', educationController.findById);
-router.post('/', educationController.create);
-router.put('/:id', educationController.update);
-router.put('/:id', educationController.delete);
+router.get('/',EducationController.index);
+router.get('/:id',EducationController.findById);
+router.post('/',EducationController.create);
+router.put('/:id',EducationController.update);
+router.delete('/:id',EducationController.delete);
+
 
 module.exports = router;

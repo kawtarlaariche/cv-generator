@@ -1,12 +1,13 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const languageController = require('../controller/language');
+const LanguageController = require('../controller/language')
 
-router.get('/', languageController.index);
-router.get('/:id', languageController.findById);
-router.post('/', languageController.create);
-router.put('/:id', languageController.update);
-router.put('/:id', languageController.delete);
+router.get('/',LanguageController.index);
+router.get('/:id',LanguageController.findById);
+router.post('/',LanguageController.create);
+router.put('/:id',LanguageController.update);
+router.delete('/:id',LanguageController.delete);
+
 
 module.exports = router;

@@ -1,27 +1,29 @@
 const models = require('../models');
-const experience = models.experience;
+const Experience = models.Experience;
 
 exports.index = (req, res) => {
-    experience.findAll().then(experiences => res.json(experiences))
+    Experience.findAll({include: ['user']}).then(experiences => res.json(experiences))
 }
 exports.findById = (req, res) => {
-    experience.findByPk(req.params.id).then(experience => { res.json(experience) })
+    Experience.findByPk(req.params.id).then(experience => { res.json(experience) })
 }
 exports.create = (req, res) => {
-    experience.create({
+    Experience.create({
         dateDebut: req.body.dateDebut,
         dateFin: req.body.dateFin,
-        description: req.body.description
+        description: req.body.description,
+        users_id:req.body.users_id
     }).then(experience => {
         console.log(experience.get)
         res.json(experience)
     }).catch(err => { console.log(err) });
 };
 exports.update = (req, res) => {
-    experience.update({
+    Experience.update({
         dateDebut: req.body.dateDebut,
         dateFin: req.body.dateFin,
         description: req.body.description,
+        users_id:req.body.users_id
     },
         {
             returning: true,
@@ -32,7 +34,7 @@ exports.update = (req, res) => {
     });
 };
 exports.delete = (req, res) => {
-    experience.destroy({ where: { id: req.params.id } }).then(experience => {
+    Experience.destroy({ where: { id: req.params.id } }).then(experience => {
         res.json(experience)
     })
 }

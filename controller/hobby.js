@@ -1,15 +1,16 @@
 const models = require('../models');
-const hobby = models.hobby;
+const Hobby = models.Hobby;
 
 exports.index = (req, res) => {
-    hobby.findAll().then(hobbies => res.json(hobbies))
+    Hobby.findAll({include: ['user']}).then(hobbies => res.json(hobbies))
 }
 exports.findById = (req, res) => {
-    hobby.findByPk(req.params.id).then(hobby => { res.json(hobby) })
+    Hobby.findByPk(req.params.id).then(hobby => { res.json(hobby) })
 }
 exports.create = (req, res) => {
-    hobby.create({
+    Hobby.create({
         description: req.body.description,
+        users_id:req.body.uers_id
 
     }).then(hobby => {
         console.log(hobby.get)
@@ -17,8 +18,9 @@ exports.create = (req, res) => {
     }).catch(err => { console.log(err) });
 };
 exports.update = (req, res) => {
-    hobby.update({
+    Hobby.update({
         description: req.body.description,
+        users_id:req.body.uers_id
     },
         {
             returning: true,
@@ -29,7 +31,7 @@ exports.update = (req, res) => {
     });
 };
 exports.delete = (req, res) => {
-    hobby.destroy({ where: { id: req.params.id } }).then(hobby => {
+    Hobby.destroy({ where: { id: req.params.id } }).then(hobby => {
         res.json(hobby)
     })
 }

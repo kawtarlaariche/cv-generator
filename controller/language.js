@@ -1,16 +1,17 @@
 const models = require('../models');
-const language = models.language;
+const Language = models.Language;
 
 exports.index = (req, res) => {
-    language.findAll().then(languages => res.json(languages))
+    Language.findAll({include: ['user']}).then(languages => res.json(languages))
 }
 exports.findById = (req, res) => {
-    language.findByPk(req.params.id).then(language => { res.json(language) })
+    Language.findByPk(req.params.id).then(language => { res.json(language) })
 }
 exports.create = (req, res) => {
     language.create({
         name: req.body.name,
         level: req.body.level,
+        users_id:req.body.users_id
      
     }).then(language => {
         console.log(language.get)
@@ -18,9 +19,10 @@ exports.create = (req, res) => {
     }).catch(err => { console.log(err) });
 };
 exports.update = (req, res) => {
-    language.update({
+    Language.update({
         name: req.body.name,
         level: req.body.level,
+        users_id:req.body.users_id
     },
         {
             returning: true,
@@ -31,7 +33,7 @@ exports.update = (req, res) => {
     });
 };
 exports.delete = (req, res) => {
-    language.destroy({ where: { id: req.params.id } }).then(language => {
+    Language.destroy({ where: { id: req.params.id } }).then(language => {
         res.json(language)
     })
 }

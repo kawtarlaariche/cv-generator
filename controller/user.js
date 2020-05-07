@@ -1,15 +1,17 @@
 const models = require('../models');
-const user = models.user;
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const User = models.User;
 
 exports.index = (req, res) => {
-    user.findAll({ include: ['adress', 'education', 'experience', 'project', 'language', 'hobby'] })
+    User.findAll()
         .then(users => res.json(users))
 }
 exports.findById = (req, res) => {
-    user.findByPk(req.params.id).then(user => { res.json(user) })
+    User.findByPk(req.params.id).then(user => { res.json(user) })
 }
 exports.create = (req, res) => {
-    user.create({
+    User.create({
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         email: req.body.email,
@@ -18,25 +20,21 @@ exports.create = (req, res) => {
         birth: req.body.birth,
         placeBirth: req.body.placeBirth,
         nationality: req.body.nationality,
+        address: req.body.address,
         image: req.body.image,
         linkedin: req.body.linkedin,
         instagram: req.body.instagram,
         facebook: req.body.facebook,
         website: req.body.website,
         profile: req.body.profile,
-        adresses_id: req.body.adresses_id,
-        educations_id: req.body.educations_id,
-        experiences_id: req.body.experiences_id,
-        projects_id: req.body.projects_id,
-        hobbies_id: req.body.hobbies_id,
-        languages_id: req.body.languages_id
+
     }).then(user => {
         console.log(user.get)
         res.json(user)
     }).catch(err => { console.log(err) });
 };
 exports.update = (req, res) => {
-    user.update({
+    User.update({
         street: req.body.street,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
@@ -46,18 +44,14 @@ exports.update = (req, res) => {
         birth: req.body.birth,
         placeBirth: req.body.placeBirth,
         nationality: req.body.nationality,
+        address: req.body.address,
         image: req.body.image,
         linkedin: req.body.linkedin,
         instagram: req.body.instagram,
         facebook: req.body.facebook,
         website: req.body.website,
         profile: req.body.profile,
-        adresses_id: req.body.adresses_id,
-        educations_id: req.body.educations_id,
-        experiences_id: req.body.experiences_id,
-        projects_id: req.body.projects_id,
-        hobbies_id: req.body.hobbies_id,
-        languages_id: req.body.languages_id
+
     },
         {
             returning: true,
@@ -67,8 +61,55 @@ exports.update = (req, res) => {
         res.json(user)
     });
 };
+
+exports.login = (req, res) => {
+
+    User.findAll({
+        where: {
+            email: req.body.email,
+        },
+        raw: true
+    }).then(
+        users => {
+            if (users.length > 0) {
+                bcrypt.compare(req.body.password, users[0].password).then((_res) => {
+                    // res === true
+
+                    let token = jwt.sign({ email: req.body.email }, 'AIMAD', {
+                        expiresIn: "24h"
+                    })
+                    res.json({ token })
+
+                })
+            }
+            else {
+                res.json({ msg: "no email found " })
+            }
+
+        },
+        err => {
+            res.json({ msg: "incorrect data" })
+        }
+    )
+}
+
+
+exports.register = (req, res) => {
+    bcrypt.hash(req.body.password, 10, function (err, hash) {
+        User.create({ email: req.body.email, password: hash })
+            .then(
+                user => {
+                    res.json({ msg: "Sucess !" })
+                },
+                err => {
+                    res.status(500).json({ msg: "Server Error Please contact the support !" })
+                }
+            )
+    })
+}
+
 exports.delete = (req, res) => {
-    user.destroy({ where: { id: req.params.id } }).then(user => {
+    User.destroy({ where: { id: req.params.id } }).then(user => {
         res.json(user)
     })
 }

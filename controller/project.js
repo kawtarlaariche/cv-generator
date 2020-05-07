@@ -1,27 +1,29 @@
 const models = require('../models');
-const project = models.project;
+const Project = models.Project;
 
 exports.index = (req, res) => {
-    project.findAll().then(projects => res.json(projects))
+    Project.findAll({include: ['user']}).then(projects => res.json(projects))
 }
 exports.findById = (req, res) => {
-    project.findByPk(req.params.id).then(project => { res.json(project) })
+    Project.findByPk(req.params.id).then(project => { res.json(project) })
 }
 exports.create = (req, res) => {
-    project.create({
+    Project.create({
         dateDebut: req.body.dateDebut,
         dateFin: req.body.dateFin,
-        description: req.body.description
+        description: req.body.description,
+        users_id:req.body.users_id
     }).then(project => {
         console.log(project.get)
         res.json(project)
     }).catch(err => { console.log(err) });
 };
 exports.update = (req, res) => {
-    project.update({
+    Project.update({
         dateDebut: req.body.dateDebut,
         dateFin: req.body.dateFin,
         description: req.body.description,
+        users_id:req.body.users_id
     },
         {
             returning: true,
@@ -32,7 +34,7 @@ exports.update = (req, res) => {
     });
 };
 exports.delete = (req, res) => {
-    project.destroy({ where: { id: req.params.id } }).then(project => {
+    Project.destroy({ where: { id: req.params.id } }).then(project => {
         res.json(project)
     })
 }

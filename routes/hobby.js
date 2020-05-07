@@ -1,12 +1,13 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 
-const hobbyController = require('../controller/hobby');
+const HobbyController = require('../controller/hobby')
 
-router.get('/', hobbyController.index);
-router.get('/:id', hobbyController.findById);
-router.post('/', hobbyController.create);
-router.put('/:id', hobbyController.update);
-router.put('/:id', hobbyController.delete);
+router.get('/',HobbyController.index);
+router.get('/:id',HobbyController.findById);
+router.post('/',HobbyController.create);
+router.put('/:id',HobbyController.update);
+router.delete('/:id',HobbyController.delete);
+
 
 module.exports = router;

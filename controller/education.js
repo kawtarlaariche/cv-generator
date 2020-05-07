@@ -1,27 +1,29 @@
 const models = require('../models');
-const education = models.education;
+const Education = models.Education;
 
 exports.index = (req, res) => {
-    education.findAll().then(educations => res.json(educations))
+    Education.findAll({include: ['user']}).then(educations => res.json(educations))
 }
 exports.findById = (req, res) => {
-    education.findByPk(req.params.id).then(education => { res.json(education) })
+    Education.findByPk(req.params.id).then(education => { res.json(education) })
 }
 exports.create = (req, res) => {
-    education.create({
+    Education.create({
         dateDebut: req.body.dateDebut,
         dateFin: req.body.dateFin,
-        description: req.body.description
+        description: req.body.description,
+        users_id:req.body.users_id
     }).then(education => {
         console.log(education.get)
         res.json(education)
     }).catch(err => { console.log(err) });
 };
 exports.update = (req, res) => {
-    education.update({
+    Education.update({
         dateDebut: req.body.dateDebut,
         dateFin: req.body.dateFin,
         description: req.body.description,
+        users_id:req.body.users_id
     },
         {
             returning: true,
@@ -32,7 +34,7 @@ exports.update = (req, res) => {
     });
 };
 exports.delete = (req, res) => {
-    education.destroy({ where: { id: req.params.id } }).then(education => {
+    Education.destroy({ where: { id: req.params.id } }).then(education => {
         res.json(education)
     })
 }

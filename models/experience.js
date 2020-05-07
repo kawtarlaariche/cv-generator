@@ -1,12 +1,17 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const experience = sequelize.define('experience', {
+  const Experience = sequelize.define('Experience', {
     dateDebut: DataTypes.DATE,
     dateFin: DataTypes.DATE,
-    description: DataTypes.STRING
+    description: DataTypes.STRING,
+    users_id: DataTypes.INTEGER
   }, {});
-  experience.associate = function(models) {
+  Experience.associate = function(models) {
     // associations can be defined here
+    Experience.belongsTo(models.User, {
+      foreignKey: "users_id",
+      as: "user"
+    })
   };
-  return experience;
+  return Experience;
 };
