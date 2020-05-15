@@ -1,6 +1,7 @@
 const models = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const moment = require('moment');
 const User = models.User;
 
 exports.index = (req, res) => {
@@ -62,6 +63,26 @@ exports.update = (req, res) => {
     });
 };
 
+exports.getUserByEmail = (req, res) => {
+
+    User.findAll({
+        where: {
+            email: req.body.email
+        },
+        raw: true
+    }).then(
+        users => {
+            if (users.length > 0) {
+                res.json(users[0])
+            }
+            else {
+                res.status(400).json({ msg: 'email not found' })
+            }
+        },
+        err => { err })
+
+}
+
 exports.login = (req, res) => {
 
     User.findAll({
@@ -75,16 +96,17 @@ exports.login = (req, res) => {
                 bcrypt.compare(req.body.password, users[0].password)
                     .then(
                         compare => {
-                         if(compare){
-                            let token = jwt.sign({ email: req.body.email }, 'AIMAD', {
-                                expiresIn: "24h"
-                            })
-                            res.status(200).json({ token });
-                         }
-                        else  res.status(400).json({msg:"password incorrect"})   
+                            if (compare) {
+                                let token = jwt.sign({ email: req.body.email }, process.env.TOKEN_SECRET_KEY, {
+                                    expiresIn: process.env.TOKEN_EXPIRY_TIME + "h" || "24h"
+                                })
+                                let expiryTime = moment().tz(process.env.TZ).add(process.env.TOKEN_EXPIRY_TIME, 'hours');
+                                res.json(200, { token: token, EXPIRY_TIME: expiryTime.format(), firstname:users[0].firstname, lastname:user[0].lastnme});
+                            }
+                            else res.json(400, { msg: "password incorrect" })
 
                         },
-                        
+
                     )
             }
             else {
@@ -107,31 +129,31 @@ exports.register = (req, res) => {
             },
             raw: true
         }).then(
-            users=>{
-                if (users.length > 0){
-                    res.status(400).json({msg:"email already exist"}) 
+            users => {
+                if (users.length > 0) {
+                    res.status(400).json({ msg: "email already exist" })
                 }
                 else {
-                User.create(
-                    {
-                        firstname: req.body.firstname,
-                        lastname: req.body.lastname,
-                        email: req.body.email,
-                        password: hash
-                    })
-                    .then(
-                        user => {
-                            res.status(200).json({ msg: "Sucess !" })
-                        },
-                        err => {
-                            res.status(500).json({ msg: "Server Error Please contact the support !" })
-                        }
-                    )
+                    User.create(
+                        {
+                            firstname: req.body.firstname,
+                            lastname: req.body.lastname,
+                            email: req.body.email,
+                            password: hash
+                        })
+                        .then(
+                            user => {
+                                res.status(200).json({ msg: "Sucess !" })
+                            },
+                            err => {
+                                res.status(500).json({ msg: "Server Error Please contact the support !" })
+                            }
+                        )
                 }
             }
-          
+
         )
-        
+
     })
 }
 

@@ -1,0 +1,8 @@
+{
+    "env": {
+        "PORT": 4000,
+        "TZ": "Europe/Berlin",
+        "TOKEN_EXPIRY_TIME": 24,
+        "TOKEN_SECRET_KEY": "AIMAD"
+    }
+}
