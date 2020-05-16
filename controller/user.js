@@ -39,7 +39,6 @@ exports.update = (req, res) => {
         street: req.body.street,
         firstname: req.body.firstname,
         lastname: req.body.lastname,
-        email: req.body.email,
         password: req.body.password,
         phone: req.body.phone,
         birth: req.body.birth,
@@ -59,7 +58,11 @@ exports.update = (req, res) => {
             where: { id: req.params.id }
         }
     ).then(user => {
-        res.json(user)
+        if(user[1]!=0) { 
+            res.json({msg:"user updated"});
+            console.log(user)
+             }
+        else { res.json({ msg: 'id not found' }) }
     });
 };
 
@@ -101,7 +104,7 @@ exports.login = (req, res) => {
                                     expiresIn: process.env.TOKEN_EXPIRY_TIME + "h" || "24h"
                                 })
                                 let expiryTime = moment().tz(process.env.TZ).add(process.env.TOKEN_EXPIRY_TIME, 'hours');
-                                let user1 = {firstname:users[0].firstname, lastname:users[0].lastname,email:users[0].email};
+                                let user1 = {id:users[0].id,firstname:users[0].firstname, lastname:users[0].lastname,email:users[0].email};
                                 res.json(200, {token: token,EXPIRY_TIME: expiryTime.format(),user:user1}); //seft lih ghir li m7taja
                             }
                             else res.json(400, { msg: "password incorrect" })
