@@ -101,7 +101,8 @@ exports.login = (req, res) => {
                                     expiresIn: process.env.TOKEN_EXPIRY_TIME + "h" || "24h"
                                 })
                                 let expiryTime = moment().tz(process.env.TZ).add(process.env.TOKEN_EXPIRY_TIME, 'hours');
-                                res.json(200, { token: token, EXPIRY_TIME: expiryTime.format(), firstname:users[0].firstname, lastname:user[0].lastnme});
+                                let user1 = {firstname:users[0].firstname, lastname:users[0].lastname,email:users[0].email};
+                                res.json(200, {token: token,EXPIRY_TIME: expiryTime.format(),user:user1}); //seft lih ghir li m7taja
                             }
                             else res.json(400, { msg: "password incorrect" })
 
