@@ -7,10 +7,28 @@ exports.index = (req, res) => {
 exports.findById = (req, res) => {
     Project.findByPk(req.params.id).then(project => { res.json(project) })
 }
+exports.findProjectsByUserID = (req, res) =>{
+    Project.findAll({
+        where: {
+            users_id: req.body.users_id,
+        },
+        raw: true
+    }).then(
+        projects=>{
+          /*  if(projects.length>0) { 
+                res.json(projects)
+            }
+            else  res.status(403).json({ msg: "no Project found" })*/
+            res.json(projects)
+        },
+        err=> {res.status(500).json({ msg: ' server Problem !! could plz later try to connect' })}
+    )
+}
 exports.create = (req, res) => {
     Project.create({
         dateDebut: req.body.dateDebut,
         dateFin: req.body.dateFin,
+        link:req.body.link,
         description: req.body.description,
         users_id:req.body.users_id
     }).then(project => {
@@ -22,6 +40,7 @@ exports.update = (req, res) => {
     Project.update({
         dateDebut: req.body.dateDebut,
         dateFin: req.body.dateFin,
+        link:req.body.link,
         description: req.body.description,
         users_id:req.body.users_id
     },

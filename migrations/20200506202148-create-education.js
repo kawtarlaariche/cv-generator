@@ -14,6 +14,9 @@ module.exports = {
       dateFin: {
         type: Sequelize.DATE
       },
+      university: {
+        type: Sequelize.STRING
+      },
       description: {
         type: Sequelize.STRING
       },

@@ -28,12 +28,12 @@ app.use(bodyParser.json());
 app.use(cors());
 
 
-app.use('/education', educationRoutes);
-app.use('/experience', experienceRoutes);
-app.use('/project', projectRoutes);
-app.use('/language', languageRoutes);
-app.use('/hobby', hobbyRoutes);
-app.use('/user', userRoutes);
+app.use('/educations', educationRoutes);
+app.use('/experiences', experienceRoutes);
+app.use('/projects', projectRoutes);
+app.use('/languages', languageRoutes);
+app.use('/hobbies', hobbyRoutes);
+app.use('/users', userRoutes);
 
 
 app.listen(PORT || 8000);

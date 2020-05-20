@@ -14,6 +14,12 @@ module.exports = {
       dateFin: {
         type: Sequelize.DATE
       },
+      company: {
+        type: Sequelize.STRING
+      },
+      title: {
+        type: Sequelize.STRING
+      },
       description: {
         type: Sequelize.STRING
       },

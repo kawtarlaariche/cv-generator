@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const Education = sequelize.define('Education', {
     dateDebut: DataTypes.DATE,
     dateFin: DataTypes.DATE,
+    university:DataTypes.STRING,
     description: DataTypes.STRING,
     users_id: DataTypes.INTEGER
   }, {});

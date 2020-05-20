@@ -6,6 +6,7 @@ const checkAuth = require('../middlewares/checkAuth');
 
 router.get('/', checkAuth, ExperienceController.index);
 router.get('/:id', checkAuth, ExperienceController.findById);
+router.post('/usersExperiences',checkAuth,  ExperienceController.findExperiencesByUserID);
 router.post('/', checkAuth, ExperienceController.create);
 router.put('/:id', checkAuth, ExperienceController.update);
 router.delete('/:id', checkAuth, ExperienceController.delete);

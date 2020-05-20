@@ -17,6 +17,7 @@ exports.create = (req, res) => {
         lastname: req.body.lastname,
         email: req.body.email,
         password: req.body.password,
+        title:req.body.title,
         phone: req.body.phone,
         birth: req.body.birth,
         placeBirth: req.body.placeBirth,
@@ -40,6 +41,7 @@ exports.update = (req, res) => {
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         password: req.body.password,
+        title:req.body.title,
         phone: req.body.phone,
         birth: req.body.birth,
         placeBirth: req.body.placeBirth,
@@ -103,6 +105,7 @@ exports.login = (req, res) => {
                                 let token = jwt.sign({ email: req.body.email }, process.env.TOKEN_SECRET_KEY, {
                                     expiresIn: process.env.TOKEN_EXPIRY_TIME + "h" || "24h"
                                 })
+                                console.log(users)
                                 let expiryTime = moment().tz(process.env.TZ).add(process.env.TOKEN_EXPIRY_TIME, 'hours');
                                 let user1 = {id:users[0].id,firstname:users[0].firstname, lastname:users[0].lastname,email:users[0].email};
                                 res.json(200, {token: token,EXPIRY_TIME: expiryTime.format(),user:user1}); //seft lih ghir li m7taja
@@ -119,7 +122,7 @@ exports.login = (req, res) => {
 
         },
         err => {
-            res.status(500).json({ msg: ' server Problem !! could plz later try to connect' })
+            res.status(500).json({ msg: ' server Problem !! could you plz later try to connect' })
         }
     )
 }

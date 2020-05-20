@@ -7,6 +7,7 @@ const checkAuth = require('../middlewares/checkAuth');
 router.get('/', checkAuth, LanguageController.index);
 router.get('/:id', checkAuth, LanguageController.findById);
 router.post('/', checkAuth, LanguageController.create);
+router.post('/usersLanguages',checkAuth, LanguageController.findLanguagesByUserID);
 router.put('/:id', checkAuth, LanguageController.update);
 router.delete('/:id', checkAuth, LanguageController.delete);
 
